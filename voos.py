@@ -5,7 +5,7 @@ import pandas as pd
 
 chrome = Service('C:\Program Files (x86)\chromedriver.exe')
 driver = webdriver.Chrome(service=chrome)
-url = "https://www.decolar.com/passagens-aereas/SAO/JNB?from=SB&di=1-0&reSearch=true"
+url = "https://www.decolar.com/passagens-aereas/SAO/ORL?from=SB&di=1-0"
 driver.get(url)
 
 precos = []
@@ -59,13 +59,6 @@ for i in datas:
 
 while len(empresas) < len(precos):
     empresas.append(falta_empresa)
-
-print(len(data_ida))
-print(len(data_saida))
-print(len(horario_saida))
-print(len(horario_chegada))
-print(len(empresas))
-print(len(precos))
 
 data = pd.DataFrame({'Preço':precos, 'Empresa':empresas, 'Data Ida':data_ida,'Data Volta':data_saida, 
 'Horario Ida':horario_chegada, 'Horario Volta':horario_saida,})
