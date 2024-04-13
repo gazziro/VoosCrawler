@@ -14,6 +14,12 @@ def get_schedule(schedule):
     schedule_clean = [i.text for i in schedule if i.text not in stopwords]
     return schedule_clean
 
+def arrive_and_exit(listed):
+    arrive = [x for i, x in enumerate(listed) if i%2==0]
+    exit = [x for i, x in enumerate(listed) if i%2==1]
+    return arrive, exit
+
+
 def get_fly(driver):
     price = driver.find_elements(
         By.XPATH, '//span[@Class="pricebox-big-text price"]'
@@ -35,17 +41,10 @@ def get_fly(driver):
 
     return price_listed, company_listed, date_listed, schedule_listed
 
-def resto(price_listed, company_listed, date_listed, schedule_listed):
-    # contador = 0 serve para organizar, se utilizasse o list.index(), 
-    # as datas com o mesmo número, se repetiriam e causariam uma confusão
-    # cont = 0 #serve para organizar, se utilizasse o list.index(), as datas 
-    # com o mesmo número, se repetiriam e causariam uma confusão
+def saving_informations(price_listed, company_listed, date_listed, schedule_listed):
     
-    horario_chegada = [x for i, x in enumerate(schedule_listed) if i%2==0]
-    horario_saida = [x for i, x in enumerate(schedule_listed) if i%2==1]
-
-    data_ida = [x for i, x in enumerate(date_listed) if i%2==0]
-    data_saida = [x for i, x in enumerate(date_listed) if i%2==1]
+    horario_chegada, horario_saida = arrive_and_exit(schedule_listed)
+    data_ida, data_saida = arrive_and_exit(date_listed)
 
     while len(company_listed) < len(price_listed): 
     #um problema é que às vezes tem duas company_listed para uma passagem, 
@@ -68,5 +67,4 @@ if __name__ == "__main__":
     driver = webdriver.Chrome()
     driver.get(url)
     price_listed, company_listed, date_listed, schedule_listed = get_fly(driver=driver)
-    resto(price_listed, company_listed, date_listed, schedule_listed)
-    print("oi")
+    saving_informations(price_listed, company_listed, date_listed, schedule_listed)
